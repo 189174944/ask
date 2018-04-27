@@ -1,0 +1,26 @@
+.pagination{
+    list-style: none;
+    text-align: center;
+}
+.pagination li{
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #CACBCD;
+    display: inline-block;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.pagination li a{
+    color: white;
+    display: block;
+}
+.pagination li.active{
+    background: #21BA45;
+}
+.pagination li.disabled{
+    cursor: not-allowed;
+    background: #CACBCD;
+}
