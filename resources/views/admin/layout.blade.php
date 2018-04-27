@@ -64,7 +64,7 @@
                         <img class="ui mini circular image" src="img/avatar/people/enid.png" alt="label-image"/>
                         <div class="menu">
                             {{--<div class="ui divider"></div>--}}
-                            <a class="item" href="login.html">退出</a>
+                            <a class="item" href="{{url('admin/logout')}}">退出</a>
                         </div>
                     </div>
                     {{--<a class="item labeled rightsidebar computer only">--}}
@@ -115,7 +115,7 @@
         iframe.addClass('resizeHeight')
     })
     $(document).ready(function () {
-        iframe.css('height','-webkit-fill-available')
+        iframe.css('min-height',$(window).height())
     })
 </script>
 {{--左侧item点击后，右侧加载相应的URL--}}

@@ -155,7 +155,7 @@ $('.ui.accordion').accordion({
 
 $(document).ready(function() {
 
-    colorize();
+    // colorize();
     $('.special.cards .image').dimmer({
         on: 'hover'
     });
@@ -170,54 +170,55 @@ $(document).ready(function() {
 
 });
 //Sidebar And Navbar Coloring Function (This button on Footer)
-function colorize() {
-    var a;
-    var b;
-    var d;
-    var z;
-    var l;
+// function colorize() {
+//     var a;
+//     var b;
+//     var d;
+//     var z;
+//     var l;
+//
+//     if (Cookies.get('sidebarColor') != undefined) {
+//         if (b == null) {
+//             b = $(".sidebar").attr("data-color");
+//         }
+//         $(".sidemenu").removeClass(b).addClass(Cookies.get('sidebarColor'));
+//         $(".sidebar").attr("data-color", Cookies.get('sidebarColor'));
+//     }
+//
+//     if (Cookies.get('headerColor') != undefined) {
+//         if (z == null) {
+//             z = $(".navslide .menu").attr("data-color");
+//         }
+//         $(".navslide .menu").removeClass(z).addClass(Cookies.get('headerColor'));
+//         $(".navslide .menu").attr("data-color", Cookies.get('headerColor'));
+//     }
+//
+//
+//
+//     $(".colorlist li a").on("click", function(b) {
+//         var c = $(this).attr("data-addClass");
+//         if (l == null) {
+//             l = $(".navslide .menu").attr("data-color");
+//         }
+//         console.log(l);
+//         $(".navslide .menu").removeClass(l).addClass(c);
+//         l = c;
+//         Cookies.set('headerColor', c);
+//     });
+//     $(".sidecolor li a").on("click", function(a) {
+//         var c = $(this).attr("data-addClass");
+//         // a.preventDefault();
+//         if (d == null) {
+//             d = $(".sidebar").attr("data-color");
+//         }
+//         $(".sidemenu").removeClass(d).addClass(c);
+//         $(".accordion").removeClass("inverted").addClass("inverted");
+//         Cookies.set('sidebarColor', c);
+//         d = c;
+//     });
+//     $(".colorize").popup({
+//         on: "click"
+//     });
+// }  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');  ga('create', 'UA-96662612-1', 'auto');  ga('send', 'pageview');
 
-    if (Cookies.get('sidebarColor') != undefined) {
-        if (b == null) {
-            b = $(".sidebar").attr("data-color");
-        }
-        $(".sidemenu").removeClass(b).addClass(Cookies.get('sidebarColor'));
-        $(".sidebar").attr("data-color", Cookies.get('sidebarColor'));
-    }
-
-    if (Cookies.get('headerColor') != undefined) {
-        if (z == null) {
-            z = $(".navslide .menu").attr("data-color");
-        }
-        $(".navslide .menu").removeClass(z).addClass(Cookies.get('headerColor'));
-        $(".navslide .menu").attr("data-color", Cookies.get('headerColor'));
-    }
-
-
-
-    $(".colorlist li a").on("click", function(b) {
-        var c = $(this).attr("data-addClass");
-        if (l == null) {
-            l = $(".navslide .menu").attr("data-color");
-        }
-        console.log(l);
-        $(".navslide .menu").removeClass(l).addClass(c);
-        l = c;
-        Cookies.set('headerColor', c);
-    });
-    $(".sidecolor li a").on("click", function(a) {
-        var c = $(this).attr("data-addClass");
-        // a.preventDefault();
-        if (d == null) {
-            d = $(".sidebar").attr("data-color");
-        }
-        $(".sidemenu").removeClass(d).addClass(c);
-        $(".accordion").removeClass("inverted").addClass("inverted");
-        Cookies.set('sidebarColor', c);
-        d = c;
-    });
-    $(".colorize").popup({
-        on: "click"
-    });
-}  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');  ga('create', 'UA-96662612-1', 'auto');  ga('send', 'pageview');
 //Sidebar And Navbar Coloring Function (This button on Footer)

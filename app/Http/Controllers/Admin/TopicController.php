@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\TopicManagerModel;
 use App\Models\TopicModel;
 use App\Models\TopicRelative;
+use App\Models\UsersModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
@@ -19,6 +22,13 @@ class TopicController extends Controller
     {
         $topic = TopicModel::paginate(12);
         $topicAll = TopicModel::all();
+
+        if (\request()->get('edit')) {
+            $id = request()->get('id');
+            $theTopic = TopicModel::find($id);
+            $p_topic = TopicRelative::where('topic_id', $id)->pluck('arrow_id')->toArray();
+            return view('admin.topic', compact('topic', 'topicAll', 'theTopic', 'p_topic'));
+        }
         return view('admin.topic', compact('topic', 'topicAll'));
     }
 
@@ -102,7 +112,43 @@ class TopicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $result = TopicModel::find($id)->update($request->except(['_token', 'id', 'p_topic']));
+        if ($result) {
+            $manyData = [];
+            $p_topic = $request->get('p_topic');
+            if (count($p_topic) > 0) {
+                foreach ($p_topic as $p) {
+                    array_push($manyData, [
+                        'topic_id' => $id,
+                        'arrow_id' => $p
+                    ]);
+                }
+                Log::info($manyData);
+                TopicRelative::where('topic_id', $id)->delete();
+                if (TopicRelative::insert($manyData)) {
+                    return response()->json([
+                        'code' => 1,
+                        'info' => '成功',
+                    ]);
+                } else {
+                    return response()->json([
+                        'code' => 0,
+                        'info' => '未知错误2',
+                    ]);
+                }
+            } else {
+                TopicRelative::where('topic_id', $id)->delete();
+                return response()->json([
+                    'code' => 1,
+                    'info' => '成功',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => 0,
+                'info' => '未知错误1',
+            ]);
+        }
     }
 
     /**

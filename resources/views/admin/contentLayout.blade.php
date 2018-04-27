@@ -32,6 +32,7 @@
         </div>
     </div>
 </div>
+<script src="{{asset('js/bower_components/vue/dist/vue.min.js')}}"></script>
 <script src="{{asset('js/jquery-2.1.4.min.js')}}"></script>
 <script src="{{asset('semantic/dist/semantic.min.js')}}"></script>
 <script src="{{asset('plugins/cookie/js.cookie.js')}}"></script>
