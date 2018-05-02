@@ -1,8 +1,4 @@
 <?php
-//Route::get('/',function (){
-//    echo 10000;
-//});
-
 
 //Route::get('/','Api\TopicController@getTopic');
 Route::get('/artical/getDetail', 'Api\ArticalController@getDetail');

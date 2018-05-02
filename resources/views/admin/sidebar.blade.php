@@ -1,6 +1,6 @@
 <div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey"
      style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;" data-color="grey">
-    <a class="item logo" href="index.html">
+    <a class="item logo">
         <img src="img/logo.png" alt="stagblogo"/><img src="img/thumblogo.png" alt="stagblogo" class="displaynone"/>
     </a>
     <div class="ui accordion inverted">
@@ -19,10 +19,9 @@
             <i class="dropdown icon"></i>系统设置
         </div>
         <div class="content">
-            <a class="item" href="chat.html" target="poker-main-content">
-                Chat
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+                管理员设置
             </a>
-
         </div>
         <div class="title item">
             <i class="ion-ios-world titleIcon  icon"></i>
@@ -48,6 +47,12 @@
             </a>
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
                 文章管理
+            </a>
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+                待审核文章
+            </a>
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+                问题管理
             </a>
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
                 回复管理

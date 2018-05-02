@@ -1,18 +1,22 @@
 @extends('admin.contentLayout')
-
 @section('content')
-    {{--<div class="ui segment">--}}
-    {{--<h5 class="ui  header">--}}
-    {{--话题管理--}}
-    {{--</h5>--}}
-    {{--</div>--}}
     <div class="ui segment" id="app">
         <div class="ui top attached tabular menu stackable">
-            <a class="item active" data-tab="one">所有话题
-                <i onclick="window.location.reload()" class="refresh gray large icon"></i>
-            </a>
+            <a class="item active" data-tab="one">所有话题</a>
             <a class="item" data-tab="two">增加话题</a>
-            <a class="item" data-tab="three">One</a>
+            @if(!request()->get('edit'))
+                <div class="blue ui buttons" style="margin-left: 50px">
+                    <a class="ui button">所有话题</a>
+                    <a class="ui button">根话题</a>
+                    <a class="ui button">首页推荐</a>
+                    <a class="ui button">热门</a>
+                    <a class="ui button">精选</a>
+                    <a class="ui button">城市</a>
+                    <a class="ui button">校园</a>
+                    <a class="ui button">冻结</a>
+                    <a class="ui button">锁定</a>
+                </div>
+            @endif
         </div>
         <div class="ui bottom attached tab segment active" data-tab="one">
             {{--<div class="ui segment">--}}
@@ -38,9 +42,10 @@
                         <th>热门</th>
                         <th>粉丝</th>
                         <th>创建时间</th>
-                        <th></th>
-                        <th></th>
-
+                        <th>
+                            <i onclick="window.location.reload()" class="refresh gray large icon"></i>
+                        </th>
+                        {{--<th></th>--}}
                     </tr>
                     </thead>
                     <tbody>
@@ -89,12 +94,41 @@
                             <td>{{$t->subscribe}}</td>
                             <td>{{$t->created_at}}</td>
                             <td>
-                                <a class="ui btn green button mini"
-                                   href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
+                                <div class="ui inline dropdown upward" tabindex="0">
+                                    <div class="text">操作</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu transition hidden" tabindex="-1">
+                                        <div class="active item">
+                                            <a style="display: block;color: black;font-size: 1rem;font-weight: 400"
+                                               href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
+                                        </div>
+                                        <div class="item">设置公告</div>
+                                        <div class="item">设为热门</div>
+                                        <div class="item">设为精选</div>
+                                        @if($t->id>31)
+                                            <div class="item" data-text="kebab">删除</div>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{--<div class="field">--}}
+                                {{--<div class="ui dropdown selection" tabindex="0">--}}
+                                {{--<select name="is_public">--}}
+                                {{--<option value="1"></option>--}}
+                                {{--<option value="0" selected></option>--}}
+                                {{--</select><i class="dropdown icon"></i>--}}
+                                {{--<div class="default text"></div>--}}
+                                {{--<div class="menu" tabindex="-1">--}}
+                                {{--<div class="item" data-value="1">编辑</div>--}}
+                                {{--<div class="item" data-value="0">删除</div>--}}
+                                {{--</div>--}}
+                                {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<a class="ui btn green button mini"--}}
+                                {{--href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>--}}
                             </td>
-                            <td>
-                                <a class="ui btn redli button mini">删除</a>
-                            </td>
+                            {{--<td>--}}
+                            {{--<a class="ui btn redli button mini">删除</a>--}}
+                            {{--</td>--}}
                         </tr>
                     @endforeach
                     </tbody>
@@ -104,27 +138,18 @@
                 <form class="ui form segment" id="topic-update-form"
                       data-url="{{url('admin/topic').'/'.$theTopic->id}}">
                     <input type="hidden" name="creator_id" value="1">
-                    <div class="field">
+                    <input type="hidden" id="the_topic_id" name="topic_id" value="{{$theTopic->id}}">
+                    <div class="four fields">
                         <div class="field">
                             <label>话题名称</label>
                             <input placeholder="" name="name" value="{{$theTopic->name}}" type="text">
                         </div>
-                    </div>
-                    <div class="field">
-                        <div class="field">
-                            <label>话题简介</label>
-                            <input placeholder="" name="introduce" value="{{$theTopic->introduce}}" type="text">
-                        </div>
-                    </div>
-                    <div class="field">
                         <div class="field">
                             <label>话题公告</label>
                             <input placeholder="" name="notice" value="{{$theTopic->notice}}" type="text">
                         </div>
-                    </div>
-                    <div class="two fields">
                         <div class="field">
-                            <label>是否预留</label>
+                            <label>根话题</label>
                             <div class="ui dropdown selection" tabindex="0">
                                 <select name="type">
                                     <option value="1" @if(1==$theTopic->type) selected @endif></option>
@@ -152,28 +177,76 @@
                             </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <label>选择父话题</label>
-                        @foreach($topicAll as $t)
-                            @if(in_array($t->id,$p_topic))
-                                <label for="{{"topic_".$t->id}}" style="margin: 5px;float: left">
-                                    <input type="checkbox" name="p_topic[]" value="{{$t->id}}" checked
-                                           id="{{"topic_".$t->id}}">{{$t->name}}
-                                </label>
-                            @else
-                                <label for="{{"topic_".$t->id}}" style="margin: 5px;float: left">
-                                    <input type="checkbox" name="p_topic[]" value="{{$t->id}}"
-                                           id="{{"topic_".$t->id}}">{{$t->name}}
-                                </label>
-                            @endif
-                        @endforeach
+
+                    <div class="four fields">
+                        <div class="field">
+                            <label>是否校园话题</label>
+                            <div class="ui dropdown selection" tabindex="0">
+                                <select name="is_school">
+                                    <option value="1" @if(1==$theTopic->is_school) selected @endif></option>
+                                    <option value="0" @if(0==$theTopic->is_school) selected @endif></option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item" data-value="1">是</div>
+                                    <div class="item" data-value="0">否</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>是否城市话题</label>
+                            <div class="ui dropdown selection" tabindex="0">
+                                <select name="is_city">
+                                    <option value="1" @if(1==$theTopic->is_city) selected @endif></option>
+                                    <option value="0" @if(0==$theTopic->is_city) selected @endif></option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item" data-value="1">是</div>
+                                    <div class="item" data-value="0">否</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <br>
+
                     <div class="field">
-                        <div class="ui blue button" id="topic-update">更新</div>
-                        <div class="ui error message"></div>
+                        <div class="field">
+                            <label>话题简介</label>
+                            <input placeholder="" name="introduce" value="{{$theTopic->introduce}}" type="text">
+                        </div>
+                    </div>
+                    {{--<div class="field">--}}
+                    {{--<label>选择父话题</label>--}}
+                    {{--@foreach($topicAll as $t)--}}
+                    {{--@if(in_array($t->id,$p_topic))--}}
+                    {{--<label for="{{"topic_".$t->id}}" style="margin: 5px;float: left">--}}
+                    {{--<input type="checkbox" name="p_topic[]" value="{{$t->id}}" checked--}}
+                    {{--id="{{"topic_".$t->id}}">{{$t->name}}--}}
+                    {{--</label>--}}
+                    {{--@else--}}
+                    {{--<label for="{{"topic_".$t->id}}" style="margin: 5px;float: left">--}}
+                    {{--<input type="checkbox" name="p_topic[]" value="{{$t->id}}"--}}
+                    {{--id="{{"topic_".$t->id}}">{{$t->name}}--}}
+                    {{--</label>--}}
+                    {{--@endif--}}
+                    {{--@endforeach--}}
+                    {{--</div>--}}
+                    {{--<br>--}}
+                    <div class="field">
+                        <div class="ui blue button" id="topic-update">更新信息</div>
+                        <div class="ui clear button" onclick="window.history.back()">返回</div>
                     </div>
                 </form>
+                <div class="ui segment">
+                    <label>父话题设置</label>
+                    <select class="js-example-basic-multiple" style="width: 100%" name="states[]" multiple="multiple"
+                            id="parent_topic">
+                        {{--<option value="AL">Alabama</option>--}}
+                        @foreach($selectedLabel as $k)
+                            <option value="{{$k->id}}" selected="selected">{{$k->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <form class="ui form segment" id="app1">
                     <div class="field">
                         <label>管理员设置</label>
@@ -267,14 +340,97 @@
                 </div>
             </form>
         </div>
-        <div class="ui bottom attached tab segment" data-tab="three">
-            Three
-        </div>
     </div>
 @endsection
 
 @section('js')
     <script>
+        {{--select2--}}
+        $('#parent_topic').select2({
+            maximumSelectionLength: 5,
+            ajax: {
+                url: '{{url('admin/topic_search')}}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        keyword: params.term,
+                    }
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    return {
+                        results: data.results
+                    };
+                },
+                // results: function (data) {
+                //     return {results: data};
+                // },
+                cache: true,
+                // templateResult: function (state) {
+                //     if (!state.id) {
+                //         return state.text;
+                //     }
+                //     var baseUrl = "/user/pages/images/flags";
+                //     var $state = $(
+                //         '<span><img src="' + baseUrl + '/' + state.element.value.toLowerCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
+                //     );
+                //     return $state;
+                // }
+            },
+            // tags: true,
+        })
+        ;
+        //取回数据
+        // $('#parent_topic').data({data:[{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]})
+        $("#parent_topic").on('select2:unselecting', function (e) {
+            $.ajax({
+                type: "POST",
+                url: "{{url('admin/deleteArrowId')}}",
+                data: {topic_id: $("#the_topic_id").val(), arrow_id: e.params.args.data.id},
+                success: function (data) {
+                    if (data.code === 1) {
+                        swal("干得漂亮！", "删除成功!", "success")
+
+                        // $("#parent_topic").on('select2:unselect', function (e) {
+                        // })
+                    } else {
+                        alert(data.info)
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                },
+                beforeSend: function () {
+
+                }
+            })
+
+        })
+        $("#parent_topic").on('select2:selecting', function (e) {
+            $.ajax({
+                type: "POST",
+                url: "{{url('admin/insertArrowId')}}",
+                data: {topic_id: $("#the_topic_id").val(), arrow_id: e.params.args.data.id},
+                success: function (data) {
+                    if (data.code === 1) {
+                        // alert('')
+                        swal("干得漂亮！", "添加父话题成功！", "success")
+                    } else {
+                        alert(data.info)
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                },
+                beforeSend: function () {
+
+                }
+            })
+
+        })
+                {{--select2--}}
                 {{--vue模块必须放在代码前面 否则会出现BUG--}}
         var vue = new Vue({
                 el: '#app1',
@@ -345,7 +501,9 @@
                 data: data,
                 success: function (data) {
                     if (data.code === 1) {
-                        alert("成功")
+                        swal("干得漂亮！", data.info, "success")
+                    } else {
+                        sweetAlert("哎呦……", "出错了", "error");
                     }
                 },
                 error: function (e) {
@@ -368,9 +526,12 @@
                 data: data,
                 success: function (data) {
                     if (data.code === 1) {
-                        window.history.back()
+                        swal("干得漂亮！", data.info, "success")
+                        setTimeout(function () {
+                            window.history.back()
+                        }, 1000)
                     } else {
-                        alert(data.info)
+                        sweetAlert("哎呦……", "出错了", "error");
                     }
                     console.log(data)
                 },
@@ -405,6 +566,10 @@
                 }
             })
         })
+
+        window.a = function a() {
+            alert(100)
+        }
     </script>
 @endsection
 
