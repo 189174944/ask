@@ -6,15 +6,16 @@
             <a class="item" data-tab="two">增加话题</a>
             @if(!request()->get('edit'))
                 <div class="blue ui buttons" style="margin-left: 50px">
-                    <a class="ui button">所有话题</a>
-                    <a class="ui button">根话题</a>
-                    <a class="ui button">首页推荐</a>
-                    <a class="ui button">热门</a>
-                    <a class="ui button">精选</a>
-                    <a class="ui button">城市</a>
-                    <a class="ui button">校园</a>
-                    <a class="ui button">冻结</a>
-                    <a class="ui button">锁定</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=all')}}">所有话题</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=type')}}">根话题</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_recommend')}}">推荐</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_home')}}">首页推荐</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_hot')}}">热门</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_choice')}}">精选</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_city')}}">城市</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_school')}}">校园</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_hot')}}">冻结</a>
+                    <a class="ui button" href="{{url('admin/topic?filter=is_locking')}}">锁定</a>
                 </div>
             @endif
         </div>
@@ -32,15 +33,19 @@
                     <thead>
                     <tr>
                         <th>id</th>
+                        <th>封面</th>
                         <th>名称</th>
                         <th>简介</th>
-                        <th>封面</th>
-                        <th>预留</th>
+                        <th>根话题</th>
+                        <th>校园</th>
+                        <th>城市</th>
                         <th>公开</th>
+                        <th>首页推荐</th>
                         <th>推荐</th>
                         <th>精选</th>
                         <th>热门</th>
                         <th>粉丝</th>
+                        <th>收录文章</th>
                         <th>创建时间</th>
                         <th>
                             <i onclick="window.location.reload()" class="refresh gray large icon"></i>
@@ -52,11 +57,26 @@
                     @foreach($topic as $t)
                         <tr>
                             <td>{{$t->id}}</td>
+                            <td><img src="{{!empty($t->image)?url($t->image):'/img/default/default.png'}}" width="50px"
+                                     height="50px"/></td>
                             <td>{{$t->name}}</td>
                             <td>{{$t->introduce}}</td>
-                            <td>{{$t->image or '未设置'}}</td>
                             <td>
                                 @if($t->type)
+                                    <i class="check green icon"></i>
+                                @else
+                                    <i class="minus red icon"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if($t->is_school)
+                                    <i class="check green icon"></i>
+                                @else
+                                    <i class="minus red icon"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if($t->is_city)
                                     <i class="check green icon"></i>
                                 @else
                                     <i class="minus red icon"></i>
@@ -71,6 +91,13 @@
                             </td>
                             <td>
                                 @if($t->is_home)
+                                    <i class="check green icon"></i>
+                                @else
+                                    <i class="minus red icon"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if($t->is_recommend)
                                     <i class="check green icon"></i>
                                 @else
                                     <i class="minus red icon"></i>
@@ -92,6 +119,7 @@
                             </td>
 
                             <td>{{$t->subscribe}}</td>
+                            <td>？</td>
                             <td>{{$t->created_at}}</td>
                             <td>
                                 <div class="ui inline dropdown upward" tabindex="0">
@@ -103,8 +131,9 @@
                                                href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
                                         </div>
                                         <div class="item">设置公告</div>
-                                        <div class="item">设为热门</div>
+                                        <div class="item">设为推荐</div>
                                         <div class="item">设为精选</div>
+                                        <div class="item">设为热门</div>
                                         @if($t->id>31)
                                             <div class="item" data-text="kebab">删除</div>
                                         @endif
@@ -133,8 +162,24 @@
                     @endforeach
                     </tbody>
                 </table>
-                {{$topic->links()}}
+                {{$topic->appends(['filter'=>request('filter')])->links()}}
             @else
+                <form class="ui form segment" method="post" action="{{url('admin/topic_image_upload')}}"
+                      enctype="multipart/form-data">
+                    {{csrf_field()}}
+                    <div class="field">
+                        <img src="{{url($theTopic->image)}}" style="width: 50px;height: 50px">
+                    </div>
+                    <div class="field">
+                        <label>封面图上传</label>
+
+                        <input type="hidden" name="id" value="{{$theTopic->id}}">
+                        <input type="file" name="image" id="image">
+                    </div>
+                    <div class="field">
+                        <input type="submit" class="ui blue button" value="上传话题封面"/>
+                    </div>
+                </form>
                 <form class="ui form segment" id="topic-update-form"
                       data-url="{{url('admin/topic').'/'.$theTopic->id}}">
                     <input type="hidden" name="creator_id" value="1">
@@ -207,6 +252,50 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="field">
+                            <label>是否推荐话题</label>
+                            <div class="ui dropdown selection" tabindex="0">
+                                <select name="is_recommend">
+                                    <option value="1" @if(1==$theTopic->is_recommend) selected @endif></option>
+                                    <option value="0" @if(0==$theTopic->is_recommend) selected @endif></option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item" data-value="1">是</div>
+                                    <div class="item" data-value="0">否</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>首页推荐</label>
+                            <div class="ui dropdown selection" tabindex="0">
+                                <select name="is_home">
+                                    <option value="1" @if(1==$theTopic->is_home) selected @endif></option>
+                                    <option value="0" @if(0==$theTopic->is_home) selected @endif></option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item" data-value="1">是</div>
+                                    <div class="item" data-value="0">否</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four fields">
+                        <div class="field">
+                            <label>是否出现在发现页左边菜单</label>
+                            <div class="ui dropdown selection" tabindex="0">
+                                <select name="is_menu">
+                                    <option value="1" @if(1==$theTopic->is_menu) selected @endif></option>
+                                    <option value="0" @if(0==$theTopic->is_menu) selected @endif></option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text"></div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item" data-value="1">是</div>
+                                    <div class="item" data-value="0">否</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="field">
@@ -250,11 +339,15 @@
                 <form class="ui form segment" id="app1">
                     <div class="field">
                         <label>管理员设置</label>
-                        <input placeholder="请输入管理员id" id="users_id" name="users_id" type="text">
                     </div>
-                    <div class="field">
-                        <div class="ui blue button" id="topic-add-manager"
-                             data-action="{{url('api/topic_manager/post')}}" data-topic-id="{{$theTopic->id}}">新增管理员
+                    <div class="four fields">
+                        <div class="field">
+                            <input placeholder="手机号" id="account" name="account" type="text">
+                        </div>
+                        <div class="field">
+                            <a class="ui blue button" id="topic-add-manager"
+                               data-action="{{url('api/topic_manager/post')}}" data-topic-id="{{$theTopic->id}}">新增管理员
+                            </a>
                         </div>
                     </div>
                     <div class="field">
@@ -355,6 +448,7 @@
                 data: function (params) {
                     var query = {
                         keyword: params.term,
+                        topic_id: $("#the_topic_id").val()
                     }
                     return query;
                 },
@@ -445,7 +539,7 @@
                             data: {topic_id: e.target.dataset.topic_id, users_id: e.target.dataset.users_id},
                             success: function (data) {
                                 if (data.code === 1) {
-                                    alert(data.info)
+                                    // swal("干得漂亮！", "新增管理员成功", "success")
                                     loadManager()
                                 } else {
                                     alert(data.info)
@@ -548,10 +642,10 @@
             $.ajax({
                 type: "post",
                 url: $(this).data('action'),
-                data: {topic_id: $(this).data('topic-id'), users_id: $("#users_id").val()},
+                data: {topic_id: $(this).data('topic-id'), account: $("#account").val()},
                 success: function (data) {
                     if (data.code === 1) {
-                        alert(data.info)
+                        swal("干得漂亮！", "新增管理员成功", "success")
                         loadManager()
                     } else {
                         alert(data.info)
@@ -566,10 +660,6 @@
                 }
             })
         })
-
-        window.a = function a() {
-            alert(100)
-        }
     </script>
 @endsection
 

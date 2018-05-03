@@ -13,11 +13,11 @@ class TopicManager extends Controller
     public function postManager(Request $request)
     {
         $topic_id = $request->get('topic_id');
-        $users_id = $request->get('users_id');
-        $topicCount = TopicModel::where('id', $topic_id)->count();
-        $usersCount = UsersModel::where('id', $users_id)->count();
-        if ($topicCount > 0 && $usersCount > 0) {
-
+        $account = $request->get('account');
+        $topicModel = TopicModel::where('id', $topic_id);
+        $usersModel = UsersModel::where('account', $account);
+        if ($topicModel->count() > 0 && $usersModel->count() > 0) {
+            $users_id = $usersModel->first()->id;
             if (TopicManagerModel::where(compact('users_id', 'topic_id'))->count() > 0) {
                 return response()->json([
                     'code' => 0,

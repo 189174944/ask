@@ -9,6 +9,7 @@ use App\Models\UsersModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class TopicController extends Controller
@@ -18,11 +19,19 @@ class TopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $topic = TopicModel::paginate(12);
-        $topicAll = TopicModel::all();
-        if (\request()->get('edit')) {
+        $filter = $request->get('filter');
+        if (!empty($filter)) {
+            if ($filter !== 'all') {
+                $topic = TopicModel::where($filter, 1)->paginate(12);
+            } else {
+                $topic = TopicModel::paginate(12);
+            }
+            $topicAll = TopicModel::all();
+            return view('admin.topic', compact('topic', 'topicAll'));
+        }
+        if (request()->get('edit')) {
             $id = request()->get('id');
 //            Select2中的选定的标签
             $selectedLabel = TopicModel::whereIn('id', $selectedLabel = TopicRelative::where('topic_id', $id)->pluck('arrow_id'))->select('id', 'name')->get();
@@ -31,7 +40,6 @@ class TopicController extends Controller
             $p_topic = TopicRelative::where('topic_id', $id)->pluck('arrow_id')->toArray();
             return view('admin.topic', compact('topic', 'topicAll', 'theTopic', 'p_topic', 'selectedLabel'));
         }
-        return view('admin.topic', compact('topic', 'topicAll'));
     }
 
     /**
@@ -123,7 +131,9 @@ class TopicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $result = TopicModel::find($id)->update($request->except(['_token', 'id', 'p_topic']));
+        $topicModel = TopicModel::find($id);
+        $result = $topicModel->update($request->except(['_token', 'id', 'p_topic']));
+
         if ($result) {
             $manyData = [];
             $p_topic = $request->get('p_topic');
@@ -162,12 +172,31 @@ class TopicController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+    public function topicImageUpload(Request $request)
+    {
+        //     上传图片逻辑
+        if ($request->isMethod('post')) {
+            $id = $request->get('id');
+            $file = $request->file('image');
+//            if ($file->getSize() > 1024 * 1024 * 2) {
+//                return response()->json([
+//                    'result_code' => 0,
+//                    'result_info' => '图片大小不得超过2MB!'
+//                ]);
+//            }
+            $dirPath = 'img/topic_image/';
+            $avatarUrl = time() . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
+            $file->move($dirPath, $avatarUrl);
+            if (TopicModel::find($id)->update([
+                'image' => $dirPath . $avatarUrl
+            ])) {
+                return \redirect()->back();
+            } else {
+                dd("ERROR");
+            }
+        }
+    }
+
     public function destroy($id)
     {
         //
@@ -234,12 +263,12 @@ class TopicController extends Controller
     public function search(Request $request)
     {
 //        话题搜索接口
-//        $topic_id = $request->get('topic_id');
+        $topic_id = $request->get('topic_id');
         $keywords = $request->get('keyword');
         return response()->json([
             'code' => 0,
             'info' => 'success',
-            'results' => TopicModel::where('name', 'like', $keywords . '%')->select('id', 'name as text')->get()
+            'results' => TopicModel::where('name', 'like', $keywords . '%')->where('id','!=',$topic_id)->select('id', 'name as text')->get()
         ]);
     }
 }

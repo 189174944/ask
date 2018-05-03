@@ -24,7 +24,6 @@
                 <th>来源</th>
                 <th>注册时间</th>
                 <th></th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -37,15 +36,31 @@
                     <td>{{$u->register_from}}</td>
                     <td>{{$u->created_at}}</td>
                     <td>
-                        <a class="ui btn green button mini">设为推荐</a>
-                    </td>
-                    <td>
-                        <a class="ui btn green button mini">更多资料</a>
+                        <div class="ui inline dropdown upward" tabindex="0">
+                            <div class="text">操作</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu transition hidden" tabindex="-1">
+                                {{--<div class="active item">--}}
+                                {{--<a style="display: block;color: black;font-size: 1rem;font-weight: 400"--}}
+                                {{--href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>--}}
+                                {{--</div>--}}
+                                <div class="item">
+                                    @if($u->is_special)
+                                        取消推荐
+                                    @else
+                                        设为推荐
+                                    @endif
+                                </div>
+                                <div class="item" data-text="kebab">封号</div>
+
+                            </div>
+                        </div>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
+        {{$users->appends(['filter'=>request('filter')])->links()}}
     </div>
 
 @endsection

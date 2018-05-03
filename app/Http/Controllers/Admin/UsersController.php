@@ -8,9 +8,13 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = UsersModel::paginate(12);
+        if ($request->get('filter') == 'is_special') {
+            $users = UsersModel::where('is_special', 1)->paginate(12);
+        } else {
+            $users = UsersModel::where('is_special', 0)->paginate(12);
+        }
         return view('admin.users', compact('users'));
     }
 }

@@ -32,7 +32,7 @@
             <a class="item poker-sidebar-item" data-iframe-target="{{url('admin/users')}}">
                 普通用户
             </a>
-            <a class="item" href="message.html" target="poker-main-content">
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('admin/users?filter=is_special')}}">
                 推荐作者
             </a>
         </div>
@@ -42,17 +42,17 @@
             <i class="dropdown icon"></i>内容管理
         </div>
         <div class="content">
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic?filter=all')}}">
                 话题管理
             </a>
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=1')}}">
                 文章管理
             </a>
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
-                待审核文章
-            </a>
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=2')}}">
                 问题管理
+            </a>
+            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/a')}}">
+                待审核文章
             </a>
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
                 回复管理
