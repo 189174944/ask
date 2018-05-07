@@ -8,12 +8,13 @@
             <tr>
                 <th>id</th>
                 <th>标题</th>
+                <th>话题</th>
                 <th>类型</th>
                 <th>状态</th>
                 <th>摘要</th>
                 <th>浏览</th>
-                <th>创建时间</th>
-                <th>最新评论时间</th>
+                <th>发布于</th>
+                <th>最新评论于</th>
                 <th>
                     <i onclick="window.location.reload()" class="refresh gray large icon"></i>
                 </th>
@@ -25,6 +26,11 @@
                 <tr>
                     <td>{{$t->id}}</td>
                     <td>{{$t->title}}</td>
+                    <td>
+                        @foreach($t->topic as $k)
+                            <a class="ui green circular label">{{$k->name}}</a>
+                        @endforeach
+                    </td>
                     <td>
                         @if($t->type==1)
                             文章
@@ -58,16 +64,17 @@
                             <div class="text">操作</div>
                             <i class="dropdown icon"></i>
                             <div class="menu transition hidden" tabindex="-1">
-                                <div class="active item">
-                                    <a style="display: block;color: black;font-size: 1rem;font-weight: 400"
-                                       href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
-                                </div>
+                                {{--<div class="active item">--}}
+                                {{--<a style="display: block;color: black;font-size: 1rem;font-weight: 400"--}}
+                                {{--href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>--}}
+                                {{--</div>--}}
                                 {{--<div class="item">设置公告</div>--}}
                                 {{--<div class="item">设为热门</div>--}}
                                 {{--<div class="item">设为精选</div>--}}
-                                @if($t->id>31)
-                                    <div class="item" data-text="kebab">删除</div>
-                                @endif
+                                <div class="item">预览</div>
+                                <div class="item">设为热门</div>
+                                <div class="item">设为精选</div>
+                                <div class="item" data-text="kebab">移动到回收站</div>
                             </div>
                         </div>
                     </td>

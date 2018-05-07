@@ -57,9 +57,9 @@
             {{--<a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=2&status=2')}}">--}}
                 {{--待审核问题--}}
             {{--</a>--}}
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
-                回复管理
-            </a>
+            {{--<a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">--}}
+                {{--回复管理--}}
+            {{--</a>--}}
         </div>
         <div class="title item">
             <i class="ion-mouse titleIcon icon"></i>

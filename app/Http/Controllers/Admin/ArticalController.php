@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ArticalModel;
+use App\Models\UsersArticalModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,7 +24,7 @@ class ArticalController extends Controller
             return view('admin.artical', compact('artical'));
         } elseif ($request->get('type') == 2) {
             $question = ArticalModel::where([
-                ['type', '=', 1],
+                ['type', '=', 2],
                 ['status', '>', 1]
             ])->paginate(12);
             return view('admin.question', compact('question'));
@@ -59,7 +60,16 @@ class ArticalController extends Controller
      */
     public function show($id)
     {
-        //
+        $artical = ArticalModel::find($id);
+        if ($artical) {
+            $artical->with('users', 'topic')->get();
+//            收藏数量
+            $collectCount = UsersArticalModel::where('artical_id', $id)->count();
+
+            return view('admin.artical_show', compact('artical', 'collectCount'));
+        } else {
+            dd("文章不存在");
+        }
     }
 
     /**
@@ -70,7 +80,7 @@ class ArticalController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**

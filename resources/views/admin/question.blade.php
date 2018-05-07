@@ -13,8 +13,8 @@
                 <th>状态</th>
                 <th>摘要</th>
                 <th>浏览</th>
-                <th>创建时间</th>
-                <th>最新评论时间</th>
+                <th>发布于</th>
+                <th>最新评论于</th>
                 <th>
                     <i onclick="window.location.reload()" class="refresh gray large icon"></i>
                 </th>
@@ -64,16 +64,14 @@
                             <div class="text">操作</div>
                             <i class="dropdown icon"></i>
                             <div class="menu transition hidden" tabindex="-1">
-                                <div class="active item">
-                                    <a style="display: block;color: black;font-size: 1rem;font-weight: 400"
-                                       href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
-                                </div>
-                                <div class="item">设置公告</div>
+                                {{--<div class="active item">--}}
+                                {{--<a style="display: block;color: black;font-size: 1rem;font-weight: 400"--}}
+                                {{--href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>--}}
+                                {{--</div>--}}
+                                <div class="item" href="{{url('admin/artical/'.$t->id)}}">预览</div>
                                 <div class="item">设为热门</div>
                                 <div class="item">设为精选</div>
-                                @if($t->id>31)
-                                    <div class="item" data-text="kebab">删除</div>
-                                @endif
+                                <div class="item" data-text="kebab">移动到回收站</div>
                             </div>
                         </div>
                     </td>
@@ -86,7 +84,12 @@
 @endsection
 
 @section('js')
+    <script>
+        alert(1)
+        $(".ui.modal.long").modal("attach events", ".modalsix", "show");
 
+
+    </script>
 @endsection
 
 
