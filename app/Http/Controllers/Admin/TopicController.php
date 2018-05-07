@@ -24,9 +24,9 @@ class TopicController extends Controller
         $filter = $request->get('filter');
         if (!empty($filter)) {
             if ($filter !== 'all') {
-                $topic = TopicModel::where($filter, 1)->paginate(12);
+                $topic = TopicModel::with('users')->where($filter, 1)->paginate(12);
             } else {
-                $topic = TopicModel::paginate(12);
+                $topic = TopicModel::with('users')->paginate(12);
             }
             $topicAll = TopicModel::all();
             return view('admin.topic', compact('topic', 'topicAll'));

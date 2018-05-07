@@ -45,7 +45,7 @@
                             未通过
                         @endif
                     </td>
-                    <td>{{str_limit($t->content,20,'...')}}</td>
+                    <td>{{str_limit($t->content,20,'...')}}(字数:{{ mb_strlen($t->content,'utf8') }})</td>
                     <td>
                         {{$t->visitornum}}
                     </td>
@@ -62,9 +62,9 @@
                                     <a style="display: block;color: black;font-size: 1rem;font-weight: 400"
                                        href="?edit=yes&id={{$t->id}}&from={{URL::current()}}">编辑</a>
                                 </div>
-                                <div class="item">设置公告</div>
-                                <div class="item">设为热门</div>
-                                <div class="item">设为精选</div>
+                                {{--<div class="item">设置公告</div>--}}
+                                {{--<div class="item">设为热门</div>--}}
+                                {{--<div class="item">设为精选</div>--}}
                                 @if($t->id>31)
                                     <div class="item" data-text="kebab">删除</div>
                                 @endif

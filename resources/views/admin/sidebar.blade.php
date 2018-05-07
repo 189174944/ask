@@ -48,23 +48,21 @@
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=1')}}">
                 文章管理
             </a>
+            {{--<a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=1&status=2')}}">--}}
+                {{--待审核文章--}}
+            {{--</a>--}}
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=2')}}">
                 问题管理
             </a>
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/a')}}">
-                待审核文章
-            </a>
+            {{--<a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/artical?type=2&status=2')}}">--}}
+                {{--待审核问题--}}
+            {{--</a>--}}
             <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
                 回复管理
             </a>
-            <a class="item poker-sidebar-item" data-iframe-target="{{url('/admin/topic')}}">
-                审核管理
-            </a>
         </div>
-
         <div class="title item">
             <i class="ion-mouse titleIcon icon"></i>
-
             <i class="dropdown icon"></i>分类管理
         </div>
         <div class="content">

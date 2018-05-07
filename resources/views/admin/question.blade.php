@@ -8,6 +8,7 @@
             <tr>
                 <th>id</th>
                 <th>标题</th>
+                <th>话题</th>
                 <th>类型</th>
                 <th>状态</th>
                 <th>摘要</th>
@@ -25,6 +26,11 @@
                 <tr>
                     <td>{{$t->id}}</td>
                     <td>{{$t->title}}</td>
+                    <td>
+                        @foreach($t->topic as $k)
+                            <a class="ui green circular label">{{$k->name}}</a>
+                        @endforeach
+                    </td>
                     <td>
                         @if($t->type==1)
                             文章

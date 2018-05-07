@@ -17,14 +17,14 @@ class ArticalController extends Controller
     {
         if ($request->get('type') == 1) {
             $artical = ArticalModel::where([
-                ['status', '>', 1],
-                ['type', '=', 1]
-            ])->paginate(12);
+                ['type', '=', 1],
+                ['status', '>', 1]
+            ])->with('topic')->paginate(12);
             return view('admin.artical', compact('artical'));
-        } else {
+        } elseif ($request->get('type') == 2) {
             $question = ArticalModel::where([
-                ['status', '>', 1],
-                ['type', '=', 2]
+                ['type', '=', 1],
+                ['status', '>', 1]
             ])->paginate(12);
             return view('admin.question', compact('question'));
         }

@@ -47,6 +47,7 @@
                         <th>粉丝</th>
                         <th>收录文章</th>
                         <th>创建时间</th>
+                        <th>创建人</th>
                         <th>
                             <i onclick="window.location.reload()" class="refresh gray large icon"></i>
                         </th>
@@ -121,6 +122,9 @@
                             <td>{{$t->subscribe}}</td>
                             <td>？</td>
                             <td>{{$t->created_at}}</td>
+                            <td>
+                                {{$t->users->nickname}}
+                            </td>
                             <td>
                                 <div class="ui inline dropdown upward" tabindex="0">
                                     <div class="text">操作</div>
@@ -239,6 +243,10 @@
                             </div>
                         </div>
                         <div class="field">
+                            <label>校园ID</label>
+                            <input placeholder="" name="school_id" value="{{$theTopic->school_id or ''}}" type="text">
+                        </div>
+                        <div class="field">
                             <label>是否城市话题</label>
                             <div class="ui dropdown selection" tabindex="0">
                                 <select name="is_city">
@@ -252,6 +260,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="field">
+                            <label>城市ID</label>
+                            <input placeholder="" name="city_id" value="{{$theTopic->city_id or ''}}" type="text">
+                        </div>
+
+                    </div>
+                    <div class="four fields">
                         <div class="field">
                             <label>是否推荐话题</label>
                             <div class="ui dropdown selection" tabindex="0">
@@ -280,8 +295,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="four fields">
                         <div class="field">
                             <label>是否出现在发现页左边菜单</label>
                             <div class="ui dropdown selection" tabindex="0">
